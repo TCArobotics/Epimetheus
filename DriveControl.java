@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.Timer;
 public class DriveControl
 {
     //Controller and buttons
-    private final XboxController driveController;
+    private final XboxController XboxController;
     private final Debouncer startButton;
     private final Debouncer lbButton;
     private final Debouncer rbButton;
@@ -43,9 +43,9 @@ public class DriveControl
     private double m_autoTimerCurrent; //How much time has passed since program start
 
     //initialize variables
-    public DriveControl()
+    public DriveControl(XboxController _XboxController)
     {
-        m_frontLeft = new PWMVictorSPX(RobotMap.kFrontLeftPort);
+        
         m_rearLeft = new PWMVictorSPX(RobotMap.kRearLeftPort);
         m_frontRight = new PWMVictorSPX(RobotMap.kFrontRightPort);
         m_rearRight = new PWMVictorSPX(RobotMap.kRearRightPort);
@@ -54,10 +54,10 @@ public class DriveControl
         m_right = new SpeedControllerGroup(m_frontRight, m_rearRight);
         m_robotDrive = new DifferentialDrive(m_left, m_right);
         
-        driveController = new XboxController(RobotMap.kDriverControllerPort);
-        lbButton = new Debouncer(driveController, RobotMap.kLBPort);
-        rbButton = new Debouncer(driveController, RobotMap.kRBPort);
-        startButton = new Debouncer(driveController, RobotMap.kStartPort);
+        this.XboxController = _XboxController;
+        lbButton = new Debouncer(XboxController, RobotMap.kLBPort);
+        rbButton = new Debouncer(XboxController, RobotMap.kRBPort);
+        startButton = new Debouncer(XboxController, RobotMap.kStartPort);
 
         driveType = true;
         speed = -1;
@@ -76,17 +76,17 @@ public class DriveControl
             speed = (speed == -1.25) ? -0.5 : speed -0.25;    //if speed goes past the max, reset the cycle, then subtract .25 from the speed
         }
 
-        LeftDriveInput = driveController.getY(Hand.kLeft); //Default LeftDriveInput
+        LeftDriveInput = XboxController.getY(Hand.kLeft); //Default LeftDriveInput
 
         if (driveType) //If driveType is set to Arcade/Curvature
         {
-            RightDriveInput = driveController.getX(Hand.kRight);
-            selectedDrive = (Math.abs(driveController.getY(Hand.kLeft)) > 0.1) ? 0 : 1; //change selected drive if left bumper is pressed enough
+            RightDriveInput = XboxController.getX(Hand.kRight);
+            selectedDrive = (Math.abs(XboxController.getY(Hand.kLeft)) > 0.1) ? 0 : 1; //change selected drive if left bumper is pressed enough
         }
 
         else //If driveType is set to Tank
         {
-            RightDriveInput = driveController.getY(Hand.kRight);
+            RightDriveInput = XboxController.getY(Hand.kRight);
             selectedDrive = 2; //change to tank drive
         }
     }

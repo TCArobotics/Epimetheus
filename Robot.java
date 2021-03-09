@@ -23,8 +23,9 @@ public class Robot extends TimedRobot
       k[name] for constants
   */
   
-  final XboxController m_driverController = new XboxController(RobotMap.kDriverControllerPort);
-  final DriveControl driveController = new DriveControl();
+  public static XboxController XboxController = new XboxController(RobotMap.kDriverControllerPort);
+  final DriveControl driveControl = new DriveControl(XboxController);
+  final ManipulatorControl manipulatorControl = new ManipulatorControl(XboxController);
 
   private final String kbarrelRacing = "BarrelRacing"; //the different choices for autonomousChoice
   private final String kslalomPath = "SlalomPath";
@@ -57,13 +58,13 @@ public class Robot extends TimedRobot
     switch(autonomousChoice) 
     {
     case kbarrelRacing:
-      driveController.barrelRacing();
+      driveControl.barrelRacing();
       break;
     case kslalomPath:
-      driveController.slalomPath();
+      driveControl.slalomPath();
       break;
     case kbouncePath:
-      driveController.bouncePath();
+      driveControl.bouncePath();
       break;
     }
   }
@@ -72,8 +73,10 @@ public class Robot extends TimedRobot
   @Override
   public void teleopPeriodic() 
   {
-    driveController.calculate();
-    driveController.execute();
+    driveControl.calculate();
+    manipulatorControl.calculate();
+    driveControl.execute();
+    manipulatorControl.execute();
   }
 
   //This function is called periodically during test mode.

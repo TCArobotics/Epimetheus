@@ -3,16 +3,24 @@ package frc.robot;
 public class RobotMap
 {
     //Motor ports
+    //Drive motors
     public static final int kFrontLeftPort = 8;
     public static final int kRearLeftPort = 9;
     public static final int kFrontRightPort = 0;
     public static final int kRearRightPort = 1;
 
+    //Manipulator motors
+    public static final int kGroundIntakePort = 2;            //add actual port values
+    public static final int kTurntablePort = 3;
+    public static final int kShooterIntakePort = 4;
+    public static final int kShooterLeftPort = 5;
+    public static final int kShooterRightPort = 6;
+
     //Controller and buttons
     public static final int kDriverControllerPort = 0;
 
-    public static final int kAPort = 1;
-    public static final int kBPort = 2;
+    public static final int kAPort = 1;  //toggle ground intake
+    public static final int kBPort = 2;  //toggle shooter
     public static final int kXPort = 3;
     public static final int kYPort = 4;
 
