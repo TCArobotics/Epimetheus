@@ -8,6 +8,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 
 /*  The VM is configured to automatically run this class, and to call the
@@ -23,8 +24,9 @@ public class Robot extends TimedRobot
       k[name] for constants
   */
   
-  final XboxController m_driverController = new XboxController(RobotMap.kDriverControllerPort);
-  final DriveControl driveController = new DriveControl();
+  public static XboxController XboxController = new XboxController(RobotMap.kDriverControllerPort);
+  final DriveControl driveControl = new DriveControl();
+  final ManipulatorControl manipulatorControl = new ManipulatorControl();
 
   private final String kbarrelRacing = "BarrelRacing"; //the different choices for autonomousChoice
   private final String kslalomPath = "SlalomPath";
@@ -48,6 +50,7 @@ public class Robot extends TimedRobot
   @Override
   public void autonomousInit() 
   {
+    driveControl.m_autoTimerFirst = Timer.getFPGATimestamp();
   }
 
   //This function is called periodically during autonomous.
@@ -57,23 +60,26 @@ public class Robot extends TimedRobot
     switch(autonomousChoice) 
     {
     case kbarrelRacing:
-      driveController.barrelRacing();
+      driveControl.barrelRacing();
       break;
     case kslalomPath:
-      driveController.slalomPath();
+      driveControl.slalomPath();
       break;
     case kbouncePath:
-      driveController.bouncePath();
+      driveControl.bouncePath();
       break;
     }
+    driveControl.execute();
   }
 
   //This function is called periodically during operator control.
   @Override
   public void teleopPeriodic() 
   {
-    driveController.calculate();
-    driveController.execute();
+    driveControl.calculate();
+    manipulatorControl.calculate();
+    driveControl.execute();
+    manipulatorControl.execute();
   }
 
   //This function is called periodically during test mode.
